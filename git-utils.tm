@@ -1,6 +1,6 @@
-<TeXmacs|1.99.5>
+<TeXmacs|1.99.8>
 
-<style|<tuple|generic|literate>>
+<style|<tuple|generic|literate|old-spacing>>
 
 <\body>
   <strong|><doc-data|<doc-title|Utils for
@@ -15,7 +15,7 @@
   <section|Constants>
 
   <verbatim|gitroot> is a variable that holds the git root of the current
-  buffer, initially set to <verbatim|/>. Assuming <verbatim|/.git> is not
+  buffer, initially set to <verbatim|/>. Assuming <verbatim|/.git> does not
   exist, we can use <scm|(!= gitroot "/")> to check if the current buffer is
   under a git-versioned directory.
 
