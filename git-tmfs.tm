@@ -1,6 +1,6 @@
-<TeXmacs|1.99.5>
+<TeXmacs|1.99.8>
 
-<style|<tuple|generic|literate>>
+<style|<tuple|generic|literate|old-spacing>>
 
 <\body>
   <doc-data|<doc-title|tmfs for Git>>
@@ -299,7 +299,7 @@
 
     \;
 
-    (tmfs-load-handler (commit name)
+    (tm-define (git-show-normal name)
 
     \ \ (define (sum2 x)
 
@@ -313,28 +313,23 @@
 
     \ \ 
 
-    \ \ (if (string-contains name "\|")
+    \ \ (let* ((m (git-commit-message name))
 
-    \ \ \ \ \ \ (git-show (string-replace name "\|" ":"))
+    \ \ \ \ \ \ \ \ \ (p (git-commit-parent name))
 
-    \ \ \ \ \ \ (let* ((m (git-commit-message name))
+    \ \ \ \ \ \ \ \ \ (d (git-commit-diff p name))
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (p (git-commit-parent name))
+    \ \ \ \ \ \ \ \ \ (nr (length d))
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (d (git-commit-diff p name))
+    \ \ \ \ \ \ \ \ \ (ins (list-fold + 0 (map first d)))
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (nr (length d))
+    \ \ \ \ \ \ \ \ \ (del (list-fold + 0 (map second d)))
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (ins (list-fold + 0 (map first d)))
+    \ \ \ \ \ \ \ \ \ (maxv (list-fold max 0 (map sum2 d)))
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (del (list-fold + 0 (map second d)))
+    \ \ \ \ \ \ \ \ \ (maxs (- 81 (list-fold max 0 (map length-of-2col d)))))
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (maxv (list-fold max 0 (map sum2 d)))
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ (maxs (- 81 (list-fold max 0 (map
-    length-of-2col d)))))
-
-    \ \ \ \ \ \ \ \ ($generic
+    \ \ \ \ ($generic
 
     \ \ \ \ \ \ \ \ \ ($tmfs-title "Commit Message of " (string-take name 7))
 
@@ -383,7 +378,43 @@
     \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,del
 
     \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ " deletions(" (verbatim (with color
-    red "-")) ")")))))
+    red "-")) ")"))))
+
+    \;
+
+    (tm-define (git-show-merge name)
+
+    \ \ (let* ((parents (git-commit-parents name))
+
+    \ \ \ \ \ \ \ \ \ (left (car parents))
+
+    \ \ \ \ \ \ \ \ \ (right (car (cdr parents))))
+
+    \ \ \ \ ($generic ($tmfs-title "Merge")
+
+    \ \ \ \ \ \ \ \ \ \ \ \ `(concat "parents "
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,($link (tmfs-url-commit left)
+    left)
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,(list 'new-line)
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,($link (tmfs-url-commit right)
+    right)))))
+
+    \;
+
+    (tmfs-load-handler (commit name)
+
+    \ \ (if (string-contains name "\|")
+
+    \ \ \ \ \ \ (git-show (string-replace name "\|" ":"))
+
+    \ \ \ \ \ \ (if (== (length (git-commit-parents name)) 1)
+
+    \ \ \ \ \ \ \ \ \ \ (git-show-normal name)
+
+    \ \ \ \ \ \ \ \ \ \ (git-show-merge name))))
 
     \;
 

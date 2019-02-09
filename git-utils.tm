@@ -421,11 +421,12 @@
 
     \;
 
-    (tm-define (git-commit-parent hash)
+    (tm-define (git-commit-parents hash)
 
     \ \ (let* ((cmd (string-append
 
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ callgit " log -2 --pretty=%H " hash))
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ callgit " show --no-patch --format=%P "
+    hash))
 
     \ \ \ \ \ \ \ \ \ (ret1 (eval-system cmd))
 
@@ -433,9 +434,17 @@
 
     \ \ \ \ \ \ \ \ \ (ret3 (string-split ret2 #\\nl))
 
-    \ \ \ \ \ \ \ \ \ (ret4 (cAr ret3)))
+    \ \ \ \ \ \ \ \ \ (ret4 (cAr ret3))
 
-    \ \ \ \ ret4))
+    \ \ \ \ \ \ \ \ \ (ret5 (string-split ret4 #\\ )))
+
+    \ \ \ \ ret5))
+
+    \;
+
+    (tm-define (git-commit-parent hash)
+
+    \ \ (cAr (git-commit-parents hash)))
 
     \;
 
@@ -525,8 +534,6 @@
 
     \ \ \ \ \ \ \ \ \ (map convert (cDr ret2)))))
   </scm-chunk>
-
-  \;
 </body>
 
 <initial|<\collection>

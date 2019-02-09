@@ -118,24 +118,22 @@
             (url-format u))
       (url-format (tmfs-string->url name))))
 
-(tmfs-load-handler (commit name)
+(tm-define (git-show-normal name)
   (define (sum2 x)
     (+ (first x) (second x)))
   (define (length-of-2col x)
     (+ (string-length (number->string (sum2 x)))
        (fourth x)))
   
-  (if (string-contains name "|")
-      (git-show (string-replace name "|" ":"))
-      (let* ((m (git-commit-message name))
-             (p (git-commit-parent name))
-             (d (git-commit-diff p name))
-             (nr (length d))
-             (ins (list-fold + 0 (map first d)))
-             (del (list-fold + 0 (map second d)))
-             (maxv (list-fold max 0 (map sum2 d)))
-             (maxs (- 81 (list-fold max 0 (map length-of-2col d)))))
-        ($generic
+  (let* ((m (git-commit-message name))
+         (p (git-commit-parent name))
+         (d (git-commit-diff p name))
+         (nr (length d))
+         (ins (list-fold + 0 (map first d)))
+         (del (list-fold + 0 (map second d)))
+         (maxv (list-fold max 0 (map sum2 d)))
+         (maxs (- 81 (list-fold max 0 (map length-of-2col d)))))
+    ($generic
          ($tmfs-title "Commit Message of " (string-take name 7))
          (if (== name p)
              "parent 0"
@@ -157,7 +155,24 @@
                   ,ins
                   " insertions(" (verbatim (with color green "+")) "), "
                   ,del
-                  " deletions(" (verbatim (with color red "-")) ")")))))
+                  " deletions(" (verbatim (with color red "-")) ")"))))
+
+(tm-define (git-show-merge name)
+  (let* ((parents (git-commit-parents name))
+         (left (car parents))
+         (right (car (cdr parents))))
+    ($generic ($tmfs-title "Merge")
+            `(concat "parents "
+                     ,($link (tmfs-url-commit left) left)
+                     ,(list 'new-line)
+                     ,($link (tmfs-url-commit right) right)))))
+
+(tmfs-load-handler (commit name)
+  (if (string-contains name "|")
+      (git-show (string-replace name "|" ":"))
+      (if (== (length (git-commit-parents name)) 1)
+          (git-show-normal name)
+          (git-show-merge name))))
 
 (tm-define (string->commit str name)
   (if (string-null? str) '()
