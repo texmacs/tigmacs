@@ -192,8 +192,11 @@
 
 (define (get-row-from-x x maxs maxv)
   (define (get-length nr)
-    (let* ((ret (/ (* nr (min maxs maxv)) maxv)))
-      (if (and (> ret 0) (< ret 1)) 1
+    (let* ((ret (if (== maxv 0)
+                    0
+                    (/ (* nr (min maxs maxv)) maxv))))
+      (if (and (> ret 0) (< ret 1))
+          1
           ret)))
   `(row (cell ,(third x))
         (cell ,(number->string (+ (first x) (second x))))

@@ -462,9 +462,16 @@
 
     \ \ (define (get-length nr)
 
-    \ \ \ \ (let* ((ret (/ (* nr (min maxs maxv)) maxv)))
+    \ \ \ \ (let* ((ret (if (== maxv 0)
 
-    \ \ \ \ \ \ (if (and (\<gtr\> ret 0) (\<less\> ret 1)) 1
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (/ (* nr (min maxs maxv))
+    maxv))))
+
+    \ \ \ \ \ \ (if (and (\<gtr\> ret 0) (\<less\> ret 1))
+
+    \ \ \ \ \ \ \ \ \ \ 1
 
     \ \ \ \ \ \ \ \ \ \ ret)))
 
