@@ -14,7 +14,7 @@
   (let* ((git-dir (url-append dir ".git"))
          (pdir (url-expand (url-append dir ".."))))
     (cond ((url-directory? git-dir)
-           (string-replace (url->string dir) "\" "/"))
+           (string-replace (url->string dir) "\\" "/"))
           ((== pdir dir) "/")
           (else (git-root pdir)))))
 
@@ -72,6 +72,7 @@
          (cmd (string-append callgit " add " name-s))
          (ret (eval-system cmd)))
     (set-message cmd "The file is added")))
+
 (tm-define (git-unadd name)
   (display name)
   (let* ((name-s (url->string name))
@@ -81,7 +82,7 @@
     (display cmd)))
 
 (tm-define (buffer-log name)
-  (let* ((name1 (string-replace (url->string name) "\" "/"))
+  (let* ((name1 (string-replace (url->string name) "\\" "/"))
          (sub (string-append gitroot "/"))
          (name-s (string-replace name1 sub ""))
          (cmd (string-append
@@ -163,12 +164,11 @@
 
 (tm-define (git-commit message)
   (let* ((cmd (string-append
-               callgit " commit -m "" message """))
+               callgit " commit -m \"" message "\""))
          (ret (eval-system cmd)))
     ;; (display ret)
     (set-message (string-append callgit " commit") message))
   (git-show-status))
-
 (tm-define (git-show object)
   (let* ((cmd (string-append callgit " show " object))
          (ret (eval-system cmd)))
