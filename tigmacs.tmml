@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<TeXmacs version="1.99.9">
+  <style><tuple><tm-arg>generic</tm-arg><tm-arg>old-spacing</tm-arg></tuple></style>
+  
+  <body>
+    <tm-par>
+      <doc-data><tm-arg><doc-title>Tigmacs</doc-title></tm-arg><tm-arg><doc-author><author-data><author-name>Darcy
+      SHEN</author-name></author-data></doc-author></tm-arg></doc-data>
+    </tm-par>
+    
+    <tm-par>
+      <name>Tigmacs</name> is a <TeXmacs/> plugin that provides
+      <name>Git</name> functionality. I love the ncurse tool <name>Tig</name>.
+      <name>Tigmacs</name>, just as the name indicates, mimics the behavior of
+      <name>Tig</name>.
+    </tm-par>
+  </body>
+</TeXmacs>

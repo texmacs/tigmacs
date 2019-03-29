@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+
+<TeXmacs version="1.99.9">
+  <style><tuple><tm-arg>generic</tm-arg><tm-arg>literate</tm-arg><tm-arg>old-spacing</tm-arg></tuple></style>
+  
+  <body>
+    <tm-par>
+      <doc-data><tm-arg><doc-title>Menu</doc-title></tm-arg><tm-arg><doc-author><author-data><author-name>Darcy
+      SHEN</author-name></author-data></doc-author></tm-arg></doc-data>
+    </tm-par>
+    
+    <tm-par>
+      <section>Module</section>
+    </tm-par>
+    
+    <tm-par>
+      <todo>explain the texmacs module system</todo>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-menu.scm</tm-arg>
+        <tm-arg>false</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (texmacs-module (utils git git-menu)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (:use (utils git git-utils)</tm-par>
+          
+          <tm-par xml:space="preserve">        (utils git git-tmfs)))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+    
+    <tm-par>
+      <section>Menu</section>
+    </tm-par>
+    
+    <tm-par>
+      <todo>what is <scm>(former)</scm></todo>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-menu.scm</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>false</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (menu-bind git-menu
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  ("Log" (git-show-log))</tm-par>
+          
+          <tm-par xml:space="preserve">  ("Status" (git-show-status))</tm-par>
+          
+          <tm-par xml:space="preserve">  ("Commit" (git-interactive-commit))</tm-par>
+          
+          <tm-par xml:space="preserve">  ---</tm-par>
+          
+          <tm-par xml:space="preserve">  (when (buffer-to-add? (current-buffer))</tm-par>
+          
+          <tm-par xml:space="preserve">            ("Add" (git-add (current-buffer))))</tm-par>
+          
+          <tm-par xml:space="preserve">  (when (buffer-to-unadd? (current-buffer))</tm-par>
+          
+          <tm-par xml:space="preserve">            ("Undo Add" (git-unadd (current-buffer))))</tm-par>
+          
+          <tm-par xml:space="preserve">  (when (buffer-histed? (current-buffer))</tm-par>
+          
+          <tm-par xml:space="preserve">        ("History" (git-history (current-buffer))))</tm-par>
+          
+          <tm-par xml:space="preserve">  (=<tm-sym>gtr</tm-sym> "Compare"</tm-par>
+          
+          <tm-par xml:space="preserve">      (when (buffer-tmfs? (current-buffer))</tm-par>
+          
+          <tm-par xml:space="preserve">                ("With current version"</tm-par>
+          
+          <tm-par xml:space="preserve">                  (git-compare-with-current (current-buffer))))</tm-par>
+          
+          <tm-par xml:space="preserve">      (when (buffer-tmfs? (current-buffer))</tm-par>
+          
+          <tm-par xml:space="preserve">                ("With parent version"</tm-par>
+          
+          <tm-par xml:space="preserve">                  (git-compare-with-parent (current-buffer))))</tm-par>
+          
+          <tm-par xml:space="preserve">      (when (and (not (buffer-tmfs? (current-buffer)))</tm-par>
+          
+          <tm-par xml:space="preserve">                 (buffer-has-diff? (current-buffer)))</tm-par>
+          
+          <tm-par xml:space="preserve">            ("With the master"</tm-par>
+          
+          <tm-par xml:space="preserve">              (git-compare-with-master (current-buffer))))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (menu-bind texmacs-extra-menu
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (former)</tm-par>
+          
+          <tm-par xml:space="preserve">  (if (git-versioned? (current-buffer))</tm-par>
+          
+          <tm-par xml:space="preserve">      (=<tm-sym>gtr</tm-sym> "Git"</tm-par>
+          
+          <tm-par xml:space="preserve">          (link git-menu))))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+  </body>
+  
+  <references>
+    <collection>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-1</tm-arg>
+          <tm-arg><tuple><tm-arg>1</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-2</tm-arg>
+          <tm-arg><tuple><tm-arg>2</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-menu.scm-1</tm-arg>
+          <tm-arg><tuple><tm-arg>git-menu.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-menu.scm-2</tm-arg>
+          <tm-arg><tuple><tm-arg>git-menu.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+    </collection>
+  </references>
+  
+  <auxiliary>
+    <collection>
+      <associate>
+        <tm-arg>toc</tm-arg>
+        <tm-arg>
+          <tm-par>
+            <vspace_42_>1fn</vspace_42_><with font-series="bold" math-font-series="bold">1<space>2spc</space>Module</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-1</pageref><vspace>0.5fn</vspace>
+          </tm-par>
+          
+          <tm-par>
+            <vspace_42_>1fn</vspace_42_><with font-series="bold" math-font-series="bold">2<space>2spc</space>Menu</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-2</pageref><vspace>0.5fn</vspace>
+          </tm-par>
+        </tm-arg>
+      </associate>
+    </collection>
+  </auxiliary>
+</TeXmacs>

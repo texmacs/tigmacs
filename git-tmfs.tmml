@@ -1,0 +1,741 @@
+<?xml version="1.0"?>
+
+<TeXmacs version="1.99.9">
+  <style><tuple><tm-arg>generic</tm-arg><tm-arg>literate</tm-arg><tm-arg>old-spacing</tm-arg></tuple></style>
+  
+  <body>
+    <tm-par>
+      <doc-data><doc-title>tmfs for Git</doc-title></doc-data>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-tmfs.scm</tm-arg>
+        <tm-arg>false</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (texmacs-module (utils git git-tmfs)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (:use (utils git git-utils)))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+    
+    <tm-par>
+      <section>Menu</section>
+    </tm-par>
+    
+    <tm-par>
+      <shell><tree><tm-arg>/</tm-arg><tm-arg><tree><tm-arg>/git</tm-arg><tm-arg>/git/log</tm-arg><tm-arg>/git/status</tm-arg></tree></tm-arg><tm-arg>/git_history</tm-arg><tm-arg>/commit</tm-arg></tree></shell>
+    </tm-par>
+    
+    <tm-par>
+      
+    </tm-par>
+    
+    <tm-par>
+      <todo>What is the meaning of cursor-history-add</todo>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-tmfs.scm</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (tm-define (git-show-log)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cursor-history-add (cursor-path))</tm-par>
+          
+          <tm-par xml:space="preserve">  (revert-buffer "tmfs://git/log"))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (git-show-status)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cursor-history-add (cursor-path))</tm-par>
+          
+          <tm-par xml:space="preserve">  (revert-buffer "tmfs://git/status"))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (git-history name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cursor-history-add (cursor-path))</tm-par>
+          
+          <tm-par xml:space="preserve">  (with s (url-<tm-sym>gtr</tm-sym>tmfs-string name)</tm-par>
+          
+          <tm-par xml:space="preserve">        (revert-buffer (tmfs-url-git_history s))))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+    
+    <tm-par>
+      <section>Handlers</section>
+    </tm-par>
+    
+    <tm-par>
+      <section>Route</section>
+    </tm-par>
+    
+    <tm-par>
+      <subsection><shell>/git/*</shell></subsection>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-tmfs.scm</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (tm-define ($staged-file status file)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cond ((string-starts? status "A")</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'concat "new file:   " file (list 'new-line)))</tm-par>
+          
+          <tm-par xml:space="preserve">        ((string-starts? status "M")</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'concat "modified:   " file (list 'new-line)))</tm-par>
+          
+          <tm-par xml:space="preserve">        ((string-starts? status "R")</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'concat "renamed:    " file (list 'new-line)))</tm-par>
+          
+          <tm-par xml:space="preserve">        (else "")))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define ($unstaged-file status file)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cond ((string-ends? status "M")</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'concat "modified:   " file (list 'new-line)))</tm-par>
+          
+          <tm-par xml:space="preserve">        (else "")))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define ($untracked-file status file)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cond ((== status "??")</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'concat file (list 'new-line)))</tm-par>
+          
+          <tm-par xml:space="preserve">        (else "")))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (git-status-content)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (with s (git-status)</tm-par>
+          
+          <tm-par xml:space="preserve">        ($generic</tm-par>
+          
+          <tm-par xml:space="preserve">         ($when (not s)</tm-par>
+          
+          <tm-par xml:space="preserve">                "Not git status available!")</tm-par>
+          
+          <tm-par xml:space="preserve">         ($when s</tm-par>
+          
+          <tm-par xml:space="preserve">                ($tmfs-title "Git Status")</tm-par>
+          
+          <tm-par xml:space="preserve">                ($description-long</tm-par>
+          
+          <tm-par xml:space="preserve">                 ($describe-item "Changes to be commited"</tm-par>
+          
+          <tm-par xml:space="preserve">                                 ($for (x s)</tm-par>
+          
+          <tm-par xml:space="preserve">                                       ($with (status file) x</tm-par>
+          
+          <tm-par xml:space="preserve">                                              ($staged-file status</tm-par>
+          
+          <tm-par xml:space="preserve">                                                            file))))</tm-par>
+          
+          <tm-par xml:space="preserve">                 ($describe-item "Changes not staged for commit"</tm-par>
+          
+          <tm-par xml:space="preserve">                                 ($for (x s)</tm-par>
+          
+          <tm-par xml:space="preserve">                                       ($with (status file) x</tm-par>
+          
+          <tm-par xml:space="preserve">                                              ($unstaged-file status</tm-par>
+          
+          <tm-par xml:space="preserve">                                                              file))))</tm-par>
+          
+          <tm-par xml:space="preserve">                 ($describe-item "Untracked files"</tm-par>
+          
+          <tm-par xml:space="preserve">                                 ($for (x s)</tm-par>
+          
+          <tm-par xml:space="preserve">                                       ($with (status file) x</tm-par>
+          
+          <tm-par xml:space="preserve">                                              ($untracked-file status</tm-par>
+          
+          <tm-par xml:space="preserve">                                                               file)))))))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (git-log-content)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (with h (git-log)</tm-par>
+          
+          <tm-par xml:space="preserve">        ($generic</tm-par>
+          
+          <tm-par xml:space="preserve">         ($tmfs-title "Git Log")</tm-par>
+          
+          <tm-par xml:space="preserve">         ($when (not h)</tm-par>
+          
+          <tm-par xml:space="preserve">                "This directory is not under version control.")</tm-par>
+          
+          <tm-par xml:space="preserve">         ($when h</tm-par>
+          
+          <tm-par xml:space="preserve">                ($description-long</tm-par>
+          
+          <tm-par xml:space="preserve">                 ($for (x h)</tm-par>
+          
+          <tm-par xml:space="preserve">                       ($with (date by msg commit) x</tm-par>
+          
+          <tm-par xml:space="preserve">                              ($describe-item</tm-par>
+          
+          <tm-par xml:space="preserve">                               ($inline "Commit " commit</tm-par>
+          
+          <tm-par xml:space="preserve">                                        " by " (utf8-<tm-sym>gtr</tm-sym>cork by)</tm-par>
+          
+          <tm-par xml:space="preserve">                                        " on " date)</tm-par>
+          
+          <tm-par xml:space="preserve">                               (utf8-<tm-sym>gtr</tm-sym>cork msg)))))))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tmfs-title-handler (git name doc)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cond ((== name "status") "Git Status")</tm-par>
+          
+          <tm-par xml:space="preserve">        ((== name "log") "Git Log")</tm-par>
+          
+          <tm-par xml:space="preserve">        (else "unknown")))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tmfs-load-handler (git name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (cond ((== name "status")</tm-par>
+          
+          <tm-par xml:space="preserve">         (git-status-content))</tm-par>
+          
+          <tm-par xml:space="preserve">        ((== name "log")</tm-par>
+          
+          <tm-par xml:space="preserve">         (git-log-content))</tm-par>
+          
+          <tm-par xml:space="preserve">        (else '())))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+    
+    <tm-par>
+      <subsection><shell>/git_history/*</shell></subsection>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-tmfs.scm</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (tm-define (tmfs-url-git_history . content)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (string-append "tmfs://git_history/"</tm-par>
+          
+          <tm-par xml:space="preserve">                 (string-concatenate content)))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tmfs-title-handler (git_history name doc)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (with u (tmfs-string-<tm-sym>gtr</tm-sym>url name)</tm-par>
+          
+          <tm-par xml:space="preserve">        (string-append (url-<tm-sym>gtr</tm-sym>system (url-tail u)) " - History")))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tmfs-load-handler (git_history name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (with u (tmfs-string-<tm-sym>gtr</tm-sym>url name)</tm-par>
+          
+          <tm-par xml:space="preserve">        (with h (buffer-log u)</tm-par>
+          
+          <tm-par xml:space="preserve">              ($generic</tm-par>
+          
+          <tm-par xml:space="preserve">               ($tmfs-title "History of "</tm-par>
+          
+          <tm-par xml:space="preserve">                            ($link (url-<tm-sym>gtr</tm-sym>unix u)</tm-par>
+          
+          <tm-par xml:space="preserve">                                   ($verbatim (utf8-<tm-sym>gtr</tm-sym>cork (url-<tm-sym>gtr</tm-sym>system (url-tail u))))))</tm-par>
+          
+          <tm-par xml:space="preserve">               ($when (not h)</tm-par>
+          
+          <tm-par xml:space="preserve">                      "This file is not under version control.")</tm-par>
+          
+          <tm-par xml:space="preserve">               ($when h</tm-par>
+          
+          <tm-par xml:space="preserve">                      ($description-long</tm-par>
+          
+          <tm-par xml:space="preserve">                       ($for (x h)</tm-par>
+          
+          <tm-par xml:space="preserve">                             ($with (date by msg commit) x</tm-par>
+          
+          <tm-par xml:space="preserve">                                    ($describe-item</tm-par>
+          
+          <tm-par xml:space="preserve">                                     ($inline "Commit " commit</tm-par>
+          
+          <tm-par xml:space="preserve">                                              " by " (utf8-<tm-sym>gtr</tm-sym>cork by)</tm-par>
+          
+          <tm-par xml:space="preserve">                                              " on " date)</tm-par>
+          
+          <tm-par xml:space="preserve">                                     (utf8-<tm-sym>gtr</tm-sym>cork msg))))))))))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+    
+    <tm-par>
+      <subsection><shell>/commit</shell></subsection>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-tmfs.scm</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (tm-define (tmfs-url-commit . content)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (string-append "tmfs://commit/"</tm-par>
+          
+          <tm-par xml:space="preserve">                 (string-concatenate content)))</tm-par>
+          
+          <tm-par>
+            (tmfs-format-handler (commit name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (if (string-contains name "|")</tm-par>
+          
+          <tm-par xml:space="preserve">      (with u (tmfs-string-<tm-sym>gtr</tm-sym>url (tmfs-cdr (string-replace name "|" "/")))</tm-par>
+          
+          <tm-par xml:space="preserve">            (url-format u))</tm-par>
+          
+          <tm-par xml:space="preserve">      (url-format (tmfs-string-<tm-sym>gtr</tm-sym>url name))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (git-show-normal name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (define (sum2 x)</tm-par>
+          
+          <tm-par xml:space="preserve">    (+ (first x) (second x)))</tm-par>
+          
+          <tm-par xml:space="preserve">  (define (length-of-2col x)</tm-par>
+          
+          <tm-par xml:space="preserve">    (+ (string-length (number-<tm-sym>gtr</tm-sym>string (sum2 x)))</tm-par>
+          
+          <tm-par xml:space="preserve">       (fourth x)))</tm-par>
+          
+          <tm-par xml:space="preserve">  </tm-par>
+          
+          <tm-par xml:space="preserve">  (let* ((m (git-commit-message name))</tm-par>
+          
+          <tm-par xml:space="preserve">         (p (git-commit-parent name))</tm-par>
+          
+          <tm-par xml:space="preserve">         (d (git-commit-diff p name))</tm-par>
+          
+          <tm-par xml:space="preserve">         (nr (length d))</tm-par>
+          
+          <tm-par xml:space="preserve">         (ins (list-fold + 0 (map first d)))</tm-par>
+          
+          <tm-par xml:space="preserve">         (del (list-fold + 0 (map second d)))</tm-par>
+          
+          <tm-par xml:space="preserve">         (maxv (list-fold max 0 (map sum2 d)))</tm-par>
+          
+          <tm-par xml:space="preserve">         (maxs (- 81 (list-fold max 0 (map length-of-2col d)))))</tm-par>
+          
+          <tm-par xml:space="preserve">    ($generic</tm-par>
+          
+          <tm-par xml:space="preserve">         ($tmfs-title "Commit Message of " (string-take name 7))</tm-par>
+          
+          <tm-par xml:space="preserve">         (if (== name p)</tm-par>
+          
+          <tm-par xml:space="preserve">             "parent 0"</tm-par>
+          
+          <tm-par xml:space="preserve">             ‘(concat "parent "</tm-par>
+          
+          <tm-par xml:space="preserve">                      ,($link (tmfs-url-commit p) p)))</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'new-line)</tm-par>
+          
+          <tm-par xml:space="preserve">         ($for (x m) ‘(concat ,(utf8-<tm-sym>gtr</tm-sym>cork x) ,(list 'new-line)))</tm-par>
+          
+          <tm-par xml:space="preserve">         "-----"</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'new-line)</tm-par>
+          
+          <tm-par xml:space="preserve">         ‘(verbatim</tm-par>
+          
+          <tm-par xml:space="preserve">           (tabular</tm-par>
+          
+          <tm-par xml:space="preserve">            (tformat</tm-par>
+          
+          <tm-par xml:space="preserve">             (cwith "1" "-1" "1" "-1"</tm-par>
+          
+          <tm-par xml:space="preserve">                    cell-lsep "0pt")</tm-par>
+          
+          <tm-par xml:space="preserve">             ,(cons 'table</tm-par>
+          
+          <tm-par xml:space="preserve">                    (map (lambda (x) (get-row-from-x x maxs maxv)) d)))))</tm-par>
+          
+          <tm-par xml:space="preserve">         (list 'new-line)</tm-par>
+          
+          <tm-par xml:space="preserve">         ‘(concat ,nr " files changed, "</tm-par>
+          
+          <tm-par xml:space="preserve">                  ,ins</tm-par>
+          
+          <tm-par xml:space="preserve">                  " insertions(" (verbatim (with color green "+")) "), "</tm-par>
+          
+          <tm-par xml:space="preserve">                  ,del</tm-par>
+          
+          <tm-par xml:space="preserve">                  " deletions(" (verbatim (with color red "-")) ")"))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (git-show-merge name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (let* ((parents (git-commit-parents name))</tm-par>
+          
+          <tm-par xml:space="preserve">         (left (car parents))</tm-par>
+          
+          <tm-par xml:space="preserve">         (right (car (cdr parents))))</tm-par>
+          
+          <tm-par xml:space="preserve">    ($generic ($tmfs-title "Merge")</tm-par>
+          
+          <tm-par xml:space="preserve">            ‘(concat "parents "</tm-par>
+          
+          <tm-par xml:space="preserve">                     ,($link (tmfs-url-commit left) left)</tm-par>
+          
+          <tm-par xml:space="preserve">                     ,(list 'new-line)</tm-par>
+          
+          <tm-par xml:space="preserve">                     ,($link (tmfs-url-commit right) right)))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tmfs-load-handler (commit name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (if (string-contains name "|")</tm-par>
+          
+          <tm-par xml:space="preserve">      (git-show (string-replace name "|" ":"))</tm-par>
+          
+          <tm-par xml:space="preserve">      (if (== (length (git-commit-parents name)) 1)</tm-par>
+          
+          <tm-par xml:space="preserve">          (git-show-normal name)</tm-par>
+          
+          <tm-par xml:space="preserve">          (git-show-merge name))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (tm-define (string-<tm-sym>gtr</tm-sym>commit str name)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (if (string-null? str) '()</tm-par>
+          
+          <tm-par xml:space="preserve">      (with alist (string-split str #\nl)</tm-par>
+          
+          <tm-par xml:space="preserve">            (list (string-take (first alist) 20)</tm-par>
+          
+          <tm-par xml:space="preserve">                  (second alist)</tm-par>
+          
+          <tm-par xml:space="preserve">                  (third alist)</tm-par>
+          
+          <tm-par xml:space="preserve">                  ($link (tmfs-url-commit (fourth alist)</tm-par>
+          
+          <tm-par xml:space="preserve">                                          (if (string-null? name)</tm-par>
+          
+          <tm-par xml:space="preserve">                                              ""</tm-par>
+          
+          <tm-par xml:space="preserve">                                              (string-append "|" name)))</tm-par>
+          
+          <tm-par xml:space="preserve">                         (string-take (fourth alist) 7))))))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+    
+    <tm-par>
+      <section>Routines</section>
+    </tm-par>
+    
+    <tm-par>
+      <scm-chunk>
+        <tm-arg>git-tmfs.scm</tm-arg>
+        <tm-arg>true</tm-arg>
+        <tm-arg>false</tm-arg>
+        <tm-arg>
+          <tm-par>
+            (define (string-repeat str n)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (do ((i 1 (1+ i))</tm-par>
+          
+          <tm-par xml:space="preserve">       (ret "" (string-append ret str)))</tm-par>
+          
+          <tm-par xml:space="preserve">      ((<tm-sym>gtr</tm-sym> i n) ret)))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
+          
+          <tm-par>
+            (define (get-row-from-x x maxs maxv)
+          </tm-par>
+          
+          <tm-par xml:space="preserve">  (define (get-length nr)</tm-par>
+          
+          <tm-par xml:space="preserve">    (let* ((ret (if (== maxv 0)</tm-par>
+          
+          <tm-par xml:space="preserve">                    0</tm-par>
+          
+          <tm-par xml:space="preserve">                    (/ (* nr (min maxs maxv)) maxv))))</tm-par>
+          
+          <tm-par xml:space="preserve">      (if (and (<tm-sym>gtr</tm-sym> ret 0) (<tm-sym>less</tm-sym> ret 1))</tm-par>
+          
+          <tm-par xml:space="preserve">          1</tm-par>
+          
+          <tm-par xml:space="preserve">          ret)))</tm-par>
+          
+          <tm-par xml:space="preserve">  ‘(row (cell ,(third x))</tm-par>
+          
+          <tm-par xml:space="preserve">        (cell ,(number-<tm-sym>gtr</tm-sym>string (+ (first x) (second x))))</tm-par>
+          
+          <tm-par xml:space="preserve">        (cell (concat (with color green</tm-par>
+          
+          <tm-par xml:space="preserve">                            ,(string-repeat "+"</tm-par>
+          
+          <tm-par xml:space="preserve">                                            (get-length (first x))))</tm-par>
+          
+          <tm-par xml:space="preserve">                      (with color red</tm-par>
+          
+          <tm-par xml:space="preserve">                            ,(string-repeat "-"</tm-par>
+          
+          <tm-par xml:space="preserve">                                            (get-length (second x))))))))</tm-par>
+        </tm-arg>
+      </scm-chunk>
+    </tm-par>
+  </body>
+  
+  <references>
+    <collection>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-1</tm-arg>
+          <tm-arg><tuple><tm-arg>1</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-2</tm-arg>
+          <tm-arg><tuple><tm-arg>2</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-3</tm-arg>
+          <tm-arg><tuple><tm-arg>3</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-4</tm-arg>
+          <tm-arg><tuple><tm-arg>3.1</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-5</tm-arg>
+          <tm-arg><tuple><tm-arg>3.2</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-6</tm-arg>
+          <tm-arg><tuple><tm-arg>3.3</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>auto-7</tm-arg>
+          <tm-arg><tuple><tm-arg>4</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-tmfs.scm-1</tm-arg>
+          <tm-arg><tuple><tm-arg>git-tmfs.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-tmfs.scm-2</tm-arg>
+          <tm-arg><tuple><tm-arg>git-tmfs.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-tmfs.scm-3</tm-arg>
+          <tm-arg><tuple><tm-arg>git-tmfs.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-tmfs.scm-4</tm-arg>
+          <tm-arg><tuple><tm-arg>git-tmfs.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-tmfs.scm-5</tm-arg>
+          <tm-arg><tuple><tm-arg>git-tmfs.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+      <tm-arg>
+        <associate>
+          <tm-arg>chunk-git-tmfs.scm-6</tm-arg>
+          <tm-arg><tuple><tm-arg>git-tmfs.scm</tm-arg><tm-arg>?</tm-arg></tuple></tm-arg>
+        </associate>
+      </tm-arg>
+    </collection>
+  </references>
+  
+  <auxiliary>
+    <collection>
+      <associate>
+        <tm-arg>toc</tm-arg>
+        <tm-arg>
+          <tm-par>
+            <vspace_42_>1fn</vspace_42_><with font-series="bold" math-font-series="bold">1<space>2spc</space>Menu</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-1</pageref><vspace>0.5fn</vspace>
+          </tm-par>
+          
+          <tm-par>
+            <vspace_42_>1fn</vspace_42_><with font-series="bold" math-font-series="bold">2<space>2spc</space>Handlers</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-2</pageref><vspace>0.5fn</vspace>
+          </tm-par>
+          
+          <tm-par>
+            <vspace_42_>1fn</vspace_42_><with font-series="bold" math-font-series="bold">3<space>2spc</space>Route</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-3</pageref><vspace>0.5fn</vspace>
+          </tm-par>
+          
+          <tm-par>
+            <with par-left="1tab">3.1<space>2spc</space><with mode="prog" prog-language="shell"
+            font-family="rm">/git/*</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-4</pageref></with>
+          </tm-par>
+          
+          <tm-par>
+            <with par-left="1tab">3.2<space>2spc</space><with mode="prog" prog-language="shell"
+            font-family="rm">/git_history/*</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-5</pageref></with>
+          </tm-par>
+          
+          <tm-par>
+            <with par-left="1tab">3.3<space>2spc</space><with mode="prog" prog-language="shell"
+            font-family="rm">/commit</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-6</pageref></with>
+          </tm-par>
+          
+          <tm-par>
+            <vspace_42_>1fn</vspace_42_><with font-series="bold" math-font-series="bold">4<space>2spc</space>Routines</with>
+            <datoms><tm-arg><macro><tm-arg>x</tm-arg><tm-arg><repeat><tm-arg><arg>x</arg></tm-arg><tm-arg><with
+            font-series="medium"><with font-size="1"><space>0.2fn</space>.<space>0.2fn</space></with></with></tm-arg></repeat></tm-arg></macro></tm-arg><tm-arg><htab>5mm</htab></tm-arg></datoms>
+            <no-break/><pageref>auto-7</pageref><vspace>0.5fn</vspace>
+          </tm-par>
+        </tm-arg>
+      </associate>
+    </collection>
+  </auxiliary>
+</TeXmacs>
