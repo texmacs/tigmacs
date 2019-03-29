@@ -119,7 +119,7 @@
           
           <tm-par xml:space="preserve">    (cond ((url-directory? git-dir)</tm-par>
           
-          <tm-par xml:space="preserve">           (string-replace (url-<tm-sym>gtr</tm-sym>string dir) "\" "/"))</tm-par>
+          <tm-par xml:space="preserve">           (string-replace (url-<tm-sym>gtr</tm-sym>string dir) "\\" "/"))</tm-par>
           
           <tm-par xml:space="preserve">          ((== pdir dir) "/")</tm-par>
           
@@ -345,7 +345,7 @@
             (tm-define (buffer-log name)
           </tm-par>
           
-          <tm-par xml:space="preserve">  (let* ((name1 (string-replace (url-<tm-sym>gtr</tm-sym>string name) "\" "/"))</tm-par>
+          <tm-par xml:space="preserve">  (let* ((name1 (string-replace (url-<tm-sym>gtr</tm-sym>string name) "\\" "/"))</tm-par>
           
           <tm-par xml:space="preserve">         (sub (string-append gitroot "/"))</tm-par>
           
@@ -576,7 +576,7 @@
           
           <tm-par xml:space="preserve">  (let* ((cmd (string-append</tm-par>
           
-          <tm-par xml:space="preserve">               callgit " commit -m "" message """))</tm-par>
+          <tm-par xml:space="preserve">               callgit " commit -m \"" message "\""))</tm-par>
           
           <tm-par xml:space="preserve">         (ret (eval-system cmd)))</tm-par>
           
