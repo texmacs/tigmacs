@@ -23,6 +23,10 @@
           <tm-par>
             (texmacs-module (utils git git-utils))
           </tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -60,6 +64,10 @@
           <tm-par>
             (define gitroot "/")
           </tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -83,6 +91,10 @@
           <tm-par xml:space="preserve">      (delete-tail-newline (string-drop-right a-str 1))</tm-par>
           
           <tm-par xml:space="preserve">      a-str))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -107,7 +119,7 @@
           
           <tm-par xml:space="preserve">    (cond ((url-directory? git-dir)</tm-par>
           
-          <tm-par xml:space="preserve">           (string-replace (url-<tm-sym>gtr</tm-sym>string dir) "\\" "/"))</tm-par>
+          <tm-par xml:space="preserve">           (string-replace (url-<tm-sym>gtr</tm-sym>string dir) "\" "/"))</tm-par>
           
           <tm-par xml:space="preserve">          ((== pdir dir) "/")</tm-par>
           
@@ -311,6 +323,10 @@
           <tm-par xml:space="preserve">    (set-message cmd "The file is unadded.")</tm-par>
           
           <tm-par xml:space="preserve">    (display cmd)))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -329,7 +345,7 @@
             (tm-define (buffer-log name)
           </tm-par>
           
-          <tm-par xml:space="preserve">  (let* ((name1 (string-replace (url-<tm-sym>gtr</tm-sym>string name) "\\" "/"))</tm-par>
+          <tm-par xml:space="preserve">  (let* ((name1 (string-replace (url-<tm-sym>gtr</tm-sym>string name) "\" "/"))</tm-par>
           
           <tm-par xml:space="preserve">         (sub (string-append gitroot "/"))</tm-par>
           
@@ -386,6 +402,10 @@
           <tm-par xml:space="preserve">         (string-null? (cAr ret2))</tm-par>
           
           <tm-par xml:space="preserve">         (map string-<tm-sym>gtr</tm-sym>commit-diff (cDr ret2)))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -463,6 +483,10 @@
           <tm-par xml:space="preserve">         (master (string-<tm-sym>gtr</tm-sym>url file-buffer-s)))</tm-par>
           
           <tm-par xml:space="preserve">    (compare-with-older master)))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -514,6 +538,10 @@
           <tm-par xml:space="preserve">         (string-null? (cAr ret2))</tm-par>
           
           <tm-par xml:space="preserve">         (map convert (cDr ret2)))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -548,7 +576,7 @@
           
           <tm-par xml:space="preserve">  (let* ((cmd (string-append</tm-par>
           
-          <tm-par xml:space="preserve">               callgit " commit -m \"" message "\""))</tm-par>
+          <tm-par xml:space="preserve">               callgit " commit -m "" message """))</tm-par>
           
           <tm-par xml:space="preserve">         (ret (eval-system cmd)))</tm-par>
           
@@ -557,6 +585,10 @@
           <tm-par xml:space="preserve">    (set-message (string-append callgit " commit") message))</tm-par>
           
           <tm-par xml:space="preserve">  (git-show-status))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>

@@ -1,5 +1,6 @@
 (texmacs-module (utils git git-tmfs)
   (:use (utils git git-utils)))
+
 (tm-define (git-show-log)
   (cursor-history-add (cursor-path))
   (revert-buffer "tmfs://git/log"))
@@ -12,6 +13,7 @@
   (cursor-history-add (cursor-path))
   (with s (url->tmfs-string name)
         (revert-buffer (tmfs-url-git_history s))))
+
 (tm-define ($staged-file status file)
   (cond ((string-starts? status "A")
          (list 'concat "new file:   " file (list 'new-line)))
@@ -83,6 +85,7 @@
         ((== name "log")
          (git-log-content))
         (else '())))
+
 (tm-define (tmfs-url-git_history . content)
   (string-append "tmfs://git_history/"
                  (string-concatenate content)))
@@ -109,6 +112,7 @@
                                               " by " (utf8->cork by)
                                               " on " date)
                                      (utf8->cork msg))))))))))
+
 (tm-define (tmfs-url-commit . content)
   (string-append "tmfs://commit/"
                  (string-concatenate content)))
@@ -185,6 +189,7 @@
                                               ""
                                               (string-append "|" name)))
                          (string-take (fourth alist) 7))))))
+
 (define (string-repeat str n)
   (do ((i 1 (1+ i))
        (ret "" (string-append ret str)))

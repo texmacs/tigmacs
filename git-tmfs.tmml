@@ -19,6 +19,10 @@
           </tm-par>
           
           <tm-par xml:space="preserve">  (:use (utils git git-utils)))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -78,6 +82,10 @@
           <tm-par xml:space="preserve">  (with s (url-<tm-sym>gtr</tm-sym>tmfs-string name)</tm-par>
           
           <tm-par xml:space="preserve">        (revert-buffer (tmfs-url-git_history s))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -269,6 +277,10 @@
           <tm-par xml:space="preserve">         (git-log-content))</tm-par>
           
           <tm-par xml:space="preserve">        (else '())))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -344,6 +356,10 @@
           <tm-par xml:space="preserve">                                              " on " date)</tm-par>
           
           <tm-par xml:space="preserve">                                     (utf8-<tm-sym>gtr</tm-sym>cork msg))))))))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>
@@ -529,6 +545,10 @@
           <tm-par xml:space="preserve">                                              (string-append "|" name)))</tm-par>
           
           <tm-par xml:space="preserve">                         (string-take (fourth alist) 7))))))</tm-par>
+          
+          <tm-par>
+            
+          </tm-par>
         </tm-arg>
       </scm-chunk>
     </tm-par>

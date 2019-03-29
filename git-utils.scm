@@ -1,17 +1,20 @@
 (texmacs-module (utils git git-utils))
+
 (define callgit "git")
 (define NR_LOG_OPTION " -1000 ")
 
 (define gitroot "/")
+
 (define (delete-tail-newline a-str)
   (if (string-ends? a-str "\n")
       (delete-tail-newline (string-drop-right a-str 1))
       a-str))
+
 (tm-define (git-root dir)
   (let* ((git-dir (url-append dir ".git"))
          (pdir (url-expand (url-append dir ".."))))
     (cond ((url-directory? git-dir)
-           (string-replace (url->string dir) "\\" "/"))
+           (string-replace (url->string dir) "\" "/"))
           ((== pdir dir) "/")
           (else (git-root pdir)))))
 
@@ -76,8 +79,9 @@
          (ret (eval-system cmd)))
     (set-message cmd "The file is unadded.")
     (display cmd)))
+
 (tm-define (buffer-log name)
-  (let* ((name1 (string-replace (url->string name) "\\" "/"))
+  (let* ((name1 (string-replace (url->string name) "\" "/"))
          (sub (string-append gitroot "/"))
          (name-s (string-replace name1 sub ""))
          (cmd (string-append
@@ -104,6 +108,7 @@
     (and (> (length ret2) 0)
          (string-null? (cAr ret2))
          (map string->commit-diff (cDr ret2)))))
+
 (tm-define (git-compare-with-current name)
   (let* ((name-s (url->string name))
          (file-r (cAr (string-split name-s #\|)))
@@ -131,6 +136,7 @@
                                          name-s))
          (master (string->url file-buffer-s)))
     (compare-with-older master)))
+
 (tm-define (git-status)
   (let* ((cmd (string-append callgit " status --porcelain"))
          (ret1 (eval-system cmd))
@@ -149,6 +155,7 @@
     (and (> (length ret2) 0)
          (string-null? (cAr ret2))
          (map convert (cDr ret2)))))
+
 (tm-define (git-interactive-commit)
   (:interactive #t)
   (git-show-status)
@@ -156,11 +163,12 @@
 
 (tm-define (git-commit message)
   (let* ((cmd (string-append
-               callgit " commit -m \"" message "\""))
+               callgit " commit -m "" message """))
          (ret (eval-system cmd)))
     ;; (display ret)
     (set-message (string-append callgit " commit") message))
   (git-show-status))
+
 (tm-define (git-show object)
   (let* ((cmd (string-append callgit " show " object))
          (ret (eval-system cmd)))

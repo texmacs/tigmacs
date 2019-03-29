@@ -1,6 +1,7 @@
 (texmacs-module (utils git git-menu)
   (:use (utils git git-utils)
         (utils git git-tmfs)))
+
 (menu-bind git-menu
   ("Log" (git-show-log))
   ("Status" (git-show-status))
